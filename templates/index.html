@@ -1,0 +1,13 @@
+
+{{user_info}}
+
+<img src="{{ user_info['image_url']}}" alt="pic" />
+
+<table>
+{% for key, value in playlist.items() %}
+   <tr>
+        <th> {{ key }} </th>
+        <td> {{ value }} </td>
+   </tr>
+{% endfor %}
+</table>
