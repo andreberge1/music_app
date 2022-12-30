@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block nav_item_playlist %}active{% endblock nav_item_playlist %}
+
+{% block content %}
+<div>
+    <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Oppdater liste</a>
+    <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">legg til liste</a>
+</div>
+<div class="center">
+    <table class="table table-dark table-striped table-hover" style="width:150%; margin-left: -25%;">
+      <thead class="">
+        <tr>
+          <th scope="col" style="width: 30%;" >Navn</th>
+          <th scope="col" style="width: 20%;" ># Sanger</th>
+          <th scope="col" style="width: 50%;" >Beskrivelse</th>
+        </tr>        
+      </thead>
+      <tbody>
+        {% for key, value in playlists.items %}
+          <tr>
+              <td><a href="{% url 'playlist_information' key %}" style="color:inherit; text-decoration:inherit">{{ key }}</a></td>
+              <td>{{ value.songs }}</td>
+              <td>{{ value.desc }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+        </table>  
+</div>
+
+{% endblock %}

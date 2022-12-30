@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block nav_item_concerts %}active{% endblock nav_item_concerts %}
+
+{% block content %}
+
+{% if playlists is not None%}
+    {% if artists is not None%}
+        <p>Valgt artist og spilleliste: {{ playlists}}, {{artists}}</p>
+
+    {% else %}
+        <p>Valgt spilleliste, {{ playlists}}, har følgende artister:</p>
+
+        <form name="test-form" id="id_formtest" action="" method="get">
+            <select name="category" id="category-id" form="id_formtest">
+                {% for name in artist_choice %}
+                    <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+    {% endif %}
+{% else %}
+
+    <p>Velg en spilleliste</p>
+
+    <hr>
+
+    <form name="test-form" id="id_formtest" action="" method="get">
+        <select name="category" id="category-id" form="id_formtest">
+            <option value="" disabled selected><i>Velg spilleliste</i></option>
+            {% for name in playlist_choice %}
+                <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+        <select name="playlist" id="id_playlist" form="test-form"></select>
+    </form>
+
+{% endif %}
+
+{% endblock %}

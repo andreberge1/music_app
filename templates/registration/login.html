@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<main class="px-3">
+  <h1>Log in to page</h1>
+  <p class="lead">Welcom to this music app.</p>
+  <p class="lead">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit">Log In</button>
+    </form>
+  </p>
+</main>
+
+{% endblock %}

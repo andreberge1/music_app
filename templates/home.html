@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block nav_item_home %}active{% endblock nav_item_home %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <main class="px-3">
+      <h1>Welcome!</h1>
+      <p class="lead">To experience this page, you need to either sign up og log in.</p>
+      <p class="lead">
+        <a href="{% url 'login' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Log in</a>
+      </p>
+      <p class="lead">
+        <a href="{% url 'signup' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Sign up</a>
+      </p>
+    </main>
+  </div>
+
+{% else %}
+
+<div class="container" style="display:grid;grid-template-columns: min-content 1fr;">
+    {% for key, value in content.items %}
+    <div class="colum" style="float: left; width: 40%;">
+      <img src="{{ value.picture }}" alt="" style="border-radius: 10px 10px 100px 10px;">
+    </div>
+    <div class="column" style="float:right; width: 75%;">
+        <h1>Hi {{ user.username }}</h1>
+        <p>Spotify: {{ key }}</p>
+        <p>Followers: {{ value.followers }}</p>
+        <a href="#" class="btn btn-lg btn secondary fw-bold border-white bg-white">Update info</a>      
+    </div>
+    {% endfor %}
+</div>
+
+<div class="center">
+    <table class="table table-dark table-striped table-hover" style="width:150%; margin-left: -25%;">
+      <thead class="">
+        <tr>
+          <th scope="col" style="width: 30%;" >Navn</th>
+          <th scope="col" style="width: 20%;" ># Sanger</th>
+          <th scope="col" style="width: 50%;" >Beskrivelse</th>
+        </tr>        
+      </thead>
+      <tbody>
+        {% for key, value in playlists.items %}
+          <tr>
+              <td><a href="{% url 'playlist_information' key %}" style="color:inherit; text-decoration:inherit">{{ key }}</a></td>
+              <td>{{ value.songs }}</td>
+              <td>{{ value.desc }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+        </table>  
+</div>
+
+
+{% endif %}
+{% endblock %}
+

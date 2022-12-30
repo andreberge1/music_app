@@ -1,8 +1,3 @@
-"""
-TODO:
-get_playlist_tracks tar trenger en mulighet for å ligge flere sanger til
-i ordboken, tar kun en nå
-"""
 import requests
 
 # base URL of all Spotify API endpoints
@@ -29,7 +24,11 @@ def get_token():
 
     return access_token
 
-def get_user_information(USER_ID, token, headers):
+def get_user_information(USER_ID, token):
+    headers = {
+            'Authorization': f'Bearer {token}'
+        }
+
     r = requests.get(BASE_URL+f"users/{USER_ID}",
         headers = headers)
 
@@ -43,8 +42,11 @@ def get_user_information(USER_ID, token, headers):
 
     return user_info
 
-
-def get_user_playlists(USER_ID, token, headers):
+def get_user_playlists(USER_ID, token):
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    
     r = requests.get(BASE_URL+f"users/{USER_ID}/playlists/",
         headers = headers)
 
@@ -59,39 +61,60 @@ def get_user_playlists(USER_ID, token, headers):
         num_songs = item["tracks"]["total"]
         uri = item["uri"]
 
-        details = get_playlist_tracks(tracks, token, headers)
+        # details = get_playlist_tracks(tracks, token, headers)
 
         playlists[name] = {
             "songs": num_songs,
             "description": desc,
             "tracks": tracks,
             "uri": uri,
-            "playlist_details": details
+            # "playlist_details": details
         }
 
     return playlists
 
-def get_playlist_tracks(playlist_url, token, headers):
+def get_playlist_tracks(playlist_url, token):
+    headers = {
+    'Authorization': f'Bearer {token}'
+    }
+
     r = requests.get(playlist_url, headers=headers)
     data = r.json()
 
     playlist_content = {}
+    num_song = 1
 
     for item in data["items"]:
-        artist = item["track"]["artists"][0]["name"]
-        artist_url = item["track"]["artists"][0]["href"]
-        song = item["track"]["name"]
+        artist = item["track"]["artists"][0]["name"] # artist
+        artist_url = item["track"]["artists"][0]["href"]    #artist_url
+        song = item["track"]["name"]    # song
 
-        if artist in playlist_content.keys():
-            playlist_content[artist]["songs"].append(song)
-        else:
-            playlist_content[artist] = {
-                "songs": [song],
-                "artist_url": artist_url
-            }
+        length = item["track"]["duration_ms"]
+        sec, ms = divmod(length, 1000)
+        min, sec = divmod(sec, 60)
+
+        if sec < 10:
+            sec = f"0{sec}"
+
+        song_length = f"{min}:{sec}"  # length
+        album_name = item["track"]["album"]["name"]  # album name
+        album_url = item["track"]["album"]["href"]   # album url
+
+        playlist_content[f"Song: {num_song}"] = {
+            'artist': artist,
+            'artist_url': artist_url,
+            'song': song,
+            'song_length': song_length,
+            'album_name': album_name,
+            'album_url': album_url
+        }
+
+        num_song += 1
 
     return playlist_content
 
+
+"""
 def check_ticketmaster(artist):
     url = f"https://app.ticketmaster.com/discovery/v2/events?apikey=7elxdku9GGG5k8j0Xm8KWdANDgecHMV0&keyword={artist}&locale=no"
 
@@ -99,3 +122,6 @@ def check_ticketmaster(artist):
     data = r.json()
 
     return data
+
+
+"""

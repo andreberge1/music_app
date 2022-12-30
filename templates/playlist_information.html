@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div>
+  <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Oppdater liste</a>
+  <a href="{% url 'concert_overview' playlists %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Gå til konserter</a>
+</div>
+
+<div class="center">
+    <table class="table table-dark table-striped table-hover" style="width:150%; margin-left: -25%;">
+      <thead class="">
+        <tr>
+          <th scope="col" style="width: 30%;" >Artist</th>
+          <th scope="col" style="width: 30%;" >Song name</th>
+          <th scope="col" style="width: 30%;" >Album</th>
+          <th scope="col" style="width: 10%;">Length</th>
+        </tr>        
+      </thead>
+      <tbody>
+        {% for song, items in info %}
+          <tr>
+              <td>{{ items.artist }}</td>
+              <td>{{ items.song }}</td>
+              <td>{{ items.album_name }}</td>
+              <td>{{ items.song_length }}</td>
+
+          </tr>
+        {% endfor %}
+      </tbody>
+        </table>
+
+        <nav aria-label="Page navigation songs">
+        {% if info.has_other_pages %}
+        <ul class="pagination">
+
+          {% if info.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ info.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+          {% endif %}
+
+          {% for i in info.paginator.page_range %}
+            {% if info.number == i %}
+              <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if info.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ info.next_page_number }}">&raquo;</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+        </nav>
+
+</div>
+
+{% endblock %}
